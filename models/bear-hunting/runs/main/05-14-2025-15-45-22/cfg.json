@@ -1,0 +1,185 @@
+{
+    "model": {
+        "model_type": "bbox_v2",
+        "num_classes": 3,
+        "trainable_backbone_layers": 5,
+        "rpn_batch_size_per_image": 512,
+        "rpn_pre_nms_top_n_train": 4000,
+        "rpn_post_nms_top_n_train": 2000,
+        "rpn_pre_nms_top_n_test": 4000,
+        "rpn_post_nms_top_n_test": 2000,
+        "box_detections_per_img": 700,
+        "box_nms_thresh": 0.7,
+        "box_batch_size_per_image": 512,
+        "box_positive_fraction": 0.5
+    },
+    "training": {
+        "image_folder": "/home/koger/Projects/bear-hunting/annotations/bear-hunting/images",
+        "train_json_path": "/home/koger/Projects/bear-hunting/annotations/bear-hunting/train.json",
+        "val_json_path": "/home/koger/Projects/bear-hunting/annotations/bear-hunting/val.json",
+        "batch_size": 4,
+        "num_workers": 8,
+        "num_epochs": 21,
+        "run_folder": "/home/koger/Projects/confluence/models/bear-hunting/runs/main/05-14-2025-15-45-22",
+        "epochs_per_val": 2,
+        "optimizer": {
+            "name": "SGD",
+            "lr": 0.001,
+            "momentum": 0.9,
+            "weight_decay": 0.0005
+        },
+        "lr_scheduler": {
+            "name": "ReduceOnPlateau",
+            "patience": 3,
+            "factor": 0.5
+        }
+    },
+    "train_aug": {
+        "__version__": "2.0.5",
+        "transform": {
+            "__class_fullname__": "Compose",
+            "p": 1.0,
+            "transforms": [
+                {
+                    "__class_fullname__": "AtLeastOneBBoxRandomCrop",
+                    "p": 1.0,
+                    "height": 1152,
+                    "width": 1152,
+                    "erosion_factor": 0.0
+                },
+                {
+                    "__class_fullname__": "ToFloat",
+                    "p": 1.0,
+                    "max_value": 255.0
+                },
+                {
+                    "__class_fullname__": "HorizontalFlip",
+                    "p": 0.5
+                },
+                {
+                    "__class_fullname__": "VerticalFlip",
+                    "p": 0.3
+                },
+                {
+                    "__class_fullname__": "RandomBrightnessContrast",
+                    "p": 0.75,
+                    "brightness_limit": [
+                        -0.4,
+                        0.2
+                    ],
+                    "contrast_limit": [
+                        -0.2,
+                        0.2
+                    ],
+                    "brightness_by_max": true,
+                    "ensure_safe_range": false
+                },
+                {
+                    "__class_fullname__": "ShiftScaleRotate",
+                    "p": 0.25,
+                    "shift_limit_x": [
+                        -0.0625,
+                        0.0625
+                    ],
+                    "shift_limit_y": [
+                        -0.0625,
+                        0.0625
+                    ],
+                    "scale_limit": [
+                        -0.09999999999999998,
+                        0.10000000000000009
+                    ],
+                    "rotate_limit": [
+                        -15.0,
+                        15.0
+                    ],
+                    "interpolation": 1,
+                    "border_mode": 0,
+                    "fill": 0.0,
+                    "fill_mask": 0.0,
+                    "rotate_method": "largest_box",
+                    "mask_interpolation": 0
+                },
+                {
+                    "__class_fullname__": "PadIfNeeded",
+                    "p": 1.0,
+                    "min_height": 1152,
+                    "min_width": 1152,
+                    "pad_height_divisor": null,
+                    "pad_width_divisor": null,
+                    "position": "center",
+                    "border_mode": 0,
+                    "fill": 0.0,
+                    "fill_mask": 0.0
+                },
+                {
+                    "__class_fullname__": "Blur",
+                    "p": 0.1,
+                    "blur_limit": [
+                        3,
+                        7
+                    ]
+                },
+                {
+                    "__class_fullname__": "ToTensorV2",
+                    "p": 1.0,
+                    "transpose_mask": false
+                }
+            ],
+            "bbox_params": {
+                "format": "pascal_voc",
+                "label_fields": [
+                    "class_labels",
+                    "area"
+                ],
+                "min_area": 150,
+                "min_visibility": 0.0,
+                "min_width": 0.0,
+                "min_height": 0.0,
+                "check_each_transform": true,
+                "clip": false,
+                "max_accept_ratio": null
+            },
+            "keypoint_params": null,
+            "additional_targets": {},
+            "is_check_shapes": true
+        }
+    },
+    "val_aug": {
+        "__version__": "2.0.5",
+        "transform": {
+            "__class_fullname__": "Compose",
+            "p": 1.0,
+            "transforms": [
+                {
+                    "__class_fullname__": "ToFloat",
+                    "p": 1.0,
+                    "max_value": 255.0
+                },
+                {
+                    "__class_fullname__": "ToTensorV2",
+                    "p": 1.0,
+                    "transpose_mask": false
+                }
+            ],
+            "bbox_params": {
+                "format": "pascal_voc",
+                "label_fields": [
+                    "class_labels",
+                    "area"
+                ],
+                "min_area": 150,
+                "min_visibility": 0.0,
+                "min_width": 0.0,
+                "min_height": 0.0,
+                "check_each_transform": true,
+                "clip": false,
+                "max_accept_ratio": null
+            },
+            "keypoint_params": null,
+            "additional_targets": {},
+            "is_check_shapes": true
+        }
+    },
+    "readme": "First training with scaled high alt, survey, and confluence images with bear class."
+}
